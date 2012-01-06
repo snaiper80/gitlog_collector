@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+# Desc   : main 
+# Author : snaiper
+
+$LOAD_PATH << File.dirname($0)
+
+require 'configuration'
+require 'gitlog'
+require 'formatter'
+
+def initialize_environment
+   read_configuration
+end
+
+def finalize_environment
+   read_head_version 
+   write_configuration
+end
+
+def doIt
+   logs = collect_log($old_built_version)
+   puts to_html(logs, "Release Notes #{Time.now.strftime("%Y-%m-%d %H:%M:%S")}")
+end
+
+begin 
+   initialize_environment
+   
+   doIt 
+
+   finalize_environment
+
+rescue => e
+   puts e
+end
